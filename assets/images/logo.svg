@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 60" fill="none">
+    <!-- Icon Part - Abstract House/Interior Shape -->
+    <path d="M10 45 L10 15 L40 15" stroke="#D4AF37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="25" y="25" width="20" height="20" stroke="#D4AF37" stroke-width="3"/>
+    <line x1="10" y1="45" x2="45" y2="45" stroke="#D4AF37" stroke-width="3"/>
+    
+    <!-- Text Part -->
+    <text x="65" y="40" font-family="'Playfair Display', serif" font-size="28" fill="#ffffff" font-weight="bold" letter-spacing="0.5">Interior Design Viewer</text>
+</svg>

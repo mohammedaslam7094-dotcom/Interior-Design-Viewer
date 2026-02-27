@@ -1,0 +1,37 @@
+# User uploaded files (keep the directory but ignore its contents)
+uploads/*
+!uploads/.gitkeep
+!uploads/.gitignore
+
+# PHP information page (security risk)
+info.php
+
+# Environment variables (if you use them later)
+.env
+.env.local
+
+# IDE/Editor folders
+.vscode/
+.idea/
+
+# OS hidden files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Database files and dumps
+*.sqlite
+*.db
+*.sql
+
+# Logs
+php_errors.log
+error_log
+*.log
+
+# ----------------------------------------------------------------------
+# NOTE: If you plan to host this project publicly (e.g., on GitHub), 
+# you should also uncomment the line below to ignore your database 
+# credentials, and instead create a `db.example.php` file for others.
+# ----------------------------------------------------------------------
+# includes/db.php

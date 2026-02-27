@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interior Design Viewer - Project Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #1E355F;
+            color: #fff;
+            overflow: hidden;
+            /* Prevent scrolling, handle slides manually */
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 4rem;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(20px);
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide.exit {
+            display: flex;
+            opacity: 0;
+            transform: translateY(-20px);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gold-text {
+            color: #FBCF84;
+        }
+
+        .gold-border {
+            border-color: #FBCF84;
+        }
+
+        .animate-delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .animate-delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .animate-delay-300 {
+            animation-delay: 300ms;
+        }
+
+        .animate-delay-500 {
+            animation-delay: 500ms;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        /* Placeholder for images */
+        .img-placeholder {
+            background-image: linear-gradient(45deg, #1e293b 25%, #0f172a 25%, #0f172a 50%, #1e293b 50%, #1e293b 75%, #0f172a 75%, #0f172a 100%);
+            background-size: 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #4b5563;
+            transition: all 0.3s;
+        }
+
+        .img-placeholder:hover {
+            border-color: #FBCF84;
+            background-image: linear-gradient(45deg, #334155 25%, #1e293b 25%, #1e293b 50%, #334155 50%, #334155 75%, #1e293b 75%, #1e293b 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-[#1E355F]">
+
+    <!-- Controls -->
+    <div class="fixed bottom-8 right-8 z-50 flex gap-4">
+        <button onclick="prevSlide()"
+            class="p-3 rounded-full bg-white/10 hover:bg-[#FBCF84] hover:text-black transition-all backdrop-blur-sm border border-white/20">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <button onclick="nextSlide()"
+            class="p-3 rounded-full bg-white/10 hover:bg-[#FBCF84] hover:text-black transition-all backdrop-blur-sm border border-white/20">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="fixed bottom-0 left-0 h-1 bg-gray-800 w-full z-50">
+        <div id="progress" class="h-full bg-[#FBCF84] width-0 transition-all duration-500"></div>
+    </div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active" id="slide-1">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#FBCF84] rounded-full blur-[150px]"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[150px]">
+            </div>
+        </div>
+
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <div
+                class="inline-block px-4 py-1 border border-[#FBCF84] rounded-full text-[#FBCF84] text-sm tracking-widest uppercase mb-6 fade-in-up">
+                Project Review I</div>
+            <h1 class="text-6xl md:text-8xl font-bold mb-6 fade-in-up animate-delay-100 leading-tight">
+                Interior Design <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FBCF84] to-amber-200">Viewer</span>
+            </h1>
+            <p class="text-xl text-gray-400 mb-12 fade-in-up animate-delay-200 letter-spacing">A Web-Based Room
+                Visualization & Budgeting Tool</p>
+
+            <div class="flex justify-center gap-12 text-left fade-in-up animate-delay-300">
+                <div class="glass p-6 rounded-xl border-l-4 border-l-[#FBCF84]">
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Presented By</p>
+                    <p class="text-xl font-bold">[Your Name]</p>
+                </div>
+                <div class="glass p-6 rounded-xl border-l-4 border-l-blue-500">
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Roll Number</p>
+                    <p class="text-xl font-bold">[Your ID]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Abstract -->
+    <div class="slide" id="slide-2">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="order-2 md:order-1">
+                <h2 class="text-4xl font-bold mb-6 text-[#FBCF84] fade-in-up">Abstract</h2>
+                <div class="space-y-6 text-gray-300 text-lg fade-in-up animate-delay-100">
+                    <p class="leading-relaxed">
+                        The <strong class="text-white">Interior Design Viewer</strong> bridges the gap between
+                        imagination and reality. Use your own room photos to visualize premium materials before buying.
+                    </p>
+
+                    <div class="glass p-6 rounded-xl fade-in-up animate-delay-200">
+                        <h3 class="text-xl font-bold text-white mb-2">The Problem</h3>
+                        <p class="text-sm">Traditional catalogs are static. Clients struggle to visualize how a specific
+                            flooring or wall texture will look in <em>their</em> actual space.</p>
+                    </div>
+
+                    <div class="glass p-6 rounded-xl border border-[#FBCF84]/30 fade-in-up animate-delay-300">
+                        <h3 class="text-xl font-bold text-[#FBCF84] mb-2">The Solution</h3>
+                        <p class="text-sm">An interactive <strong>Web Visualizer</strong> allowing users to upload room
+                            photos, define surfaces, and apply textures in real-time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-1 md:order-2 grid grid-cols-2 gap-4 fade-in-up animate-delay-200">
+                <!-- Tech Stack Cards -->
+                <div
+                    class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+                    <i class="bi bi-layout-text-window-reverse text-4xl text-orange-500 mb-3"></i>
+                    <h3 class="font-bold">Frontend</h3>
+                    <p class="text-xs text-gray-400 mt-1">HTML5, Tailwind CSS, Canvas API</p>
+                </div>
+                <div
+                    class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+                    <i class="bi bi-hdd-network text-4xl text-purple-500 mb-3"></i>
+                    <h3 class="font-bold">Backend</h3>
+                    <p class="text-xs text-gray-400 mt-1">PHP (Core), Routing System</p>
+                </div>
+                <div
+                    class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+                    <i class="bi bi-database text-4xl text-blue-500 mb-3"></i>
+                    <h3 class="font-bold">Database</h3>
+                    <p class="text-xs text-gray-400 mt-1">MySQL (Relational)</p>
+                </div>
+                <div
+                    class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+                    <i class="bi bi-shield-check text-4xl text-green-500 mb-3"></i>
+                    <h3 class="font-bold">Security</h3>
+                    <p class="text-xs text-gray-400 mt-1">Bcrypt Hashing, Session Mgmt</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Module List -->
+    <div class="slide" id="slide-3">
+        <h2 class="text-4xl font-bold mb-12 text-center text-white fade-in-up">System Modules</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto w-full">
+            <!-- User Portal -->
+            <div class="glass rounded-2xl p-8 border-t-4 border-t-blue-500 fade-in-up animate-delay-100">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-blue-500/20 rounded-lg text-blue-400"><i class="bi bi-person"></i></div>
+                    <h3 class="text-2xl font-bold">User Portal</h3>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-blue-500"></i>
+                        <span><strong>Home & Featured:</strong> Landing page with trends</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-blue-500"></i>
+                        <span><strong>Material Gallery:</strong> Texture browser with filters</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-blue-500"></i>
+                        <span><strong>Visualizer:</strong> Interactive room editor</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-blue-500"></i>
+                        <span><strong>Budget Planner:</strong> Cost estimator</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Admin Portal -->
+            <div class="glass rounded-2xl p-8 border-t-4 border-t-[#FBCF84] fade-in-up animate-delay-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-[#FBCF84]/20 rounded-lg text-[#FBCF84]"><i class="bi bi-lock"></i></div>
+                    <h3 class="text-2xl font-bold">Admin Portal</h3>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-[#FBCF84]"></i>
+                        <span><strong>Dashboard:</strong> Analytics & Stats</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-[#FBCF84]"></i>
+                        <span><strong>Inventory:</strong> CRUD for Materials/Categories</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-[#FBCF84]"></i>
+                        <span><strong>Quotes:</strong> Manage pricing requests</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="bi bi-check-circle text-[#FBCF84]"></i>
+                        <span><strong>Reviews:</strong> Moderate user ratings</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Sub Modules Detail -->
+    <div class="slide" id="slide-4">
+        <h2 class="text-4xl font-bold mb-10 text-[#FBCF84] fade-in-up">Key Technical Features</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
+
+            <div
+                class="glass p-6 rounded-xl fade-in-up animate-delay-100 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="bi bi-qr-code-scan text-8xl"></i></div>
+                <h3 class="text-xl font-bold mb-4 text-blue-400">The Visualizer Engine</h3>
+                <p class="text-sm text-gray-400 mb-4">Core renovation tool using Canvas API.</p>
+                <ul class="text-sm space-y-2 text-gray-300">
+                    <li class="border-b border-gray-700 pb-2"><strong>Image Upload:</strong> Handles high-res user
+                        photos.</li>
+                    <li class="border-b border-gray-700 pb-2"><strong>Polygon Tool:</strong> Click-to-draw selection
+                        logic.</li>
+                    <li><strong>Blending Mode:</strong> Uses 'Multiply' blend to preserve shadows & realism.</li>
+                </ul>
+            </div>
+
+            <div
+                class="glass p-6 rounded-xl fade-in-up animate-delay-200 hover:-translate-y-2 transition-transform duration-300">
+                <h3 class="text-xl font-bold mb-4 text-green-400">Budget Planner</h3>
+                <p class="text-sm text-gray-400 mb-4">Financial estimation logic.</p>
+                <div class="bg-gray-900/50 p-4 rounded text-xs font-mono text-green-300 mb-2">
+                    Total = Area(sqft) × Material_Price
+                </div>
+                <p class="text-sm text-gray-300">Automatically fetches live prices from the database to give accurate
+                    quotes based on user input dimensions.</p>
+            </div>
+
+            <div
+                class="glass p-6 rounded-xl fade-in-up animate-delay-300 hover:-translate-y-2 transition-transform duration-300">
+                <h3 class="text-xl font-bold mb-4 text-[#FBCF84]">Data Management</h3>
+                <p class="text-sm text-gray-400 mb-4">Backend PHP structure.</p>
+                <ul class="text-sm space-y-2 text-gray-300">
+                    <li class="border-b border-gray-700 pb-2"><strong>Routing:</strong> Clean URLs (no .php extensions).
+                    </li>
+                    <li class="border-b border-gray-700 pb-2"><strong>Security:</strong> Input sanitization & SQL
+                        injection prevention.</li>
+                    <li><strong>Dynamic:</strong> Changes in Admin panel reflect instantly on User side.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Output - Visualizer -->
+    <div class="slide" id="slide-5">
+        <div class="max-w-6xl mx-auto w-full h-full flex flex-col">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <span class="text-[#FBCF84] text-sm uppercase tracking-widest font-bold">Output Screen 1</span>
+                    <h2 class="text-4xl font-bold">Interactive Room Visualizer</h2>
+                </div>
+                <div class="text-right text-gray-400 text-sm">
+                    <p>Modules: Upload Image > Selection > Texture Apply</p>
+                </div>
+            </div>
+
+            <!-- Image Placeholder -->
+            <div class="flex-1 img-placeholder rounded-2xl relative group fade-in-up">
+                <div class="text-center">
+                    <i
+                        class="bi bi-file-earmark-image text-4xl mx-auto text-gray-500 mb-4 group-hover:text-[#FBCF84] transition-colors"></i>
+                    <p class="text-xl font-bold text-gray-400 group-hover:text-white">Insert Visualizer Screenshot Here
+                    </p>
+                    <p class="text-sm text-gray-600 mt-2">Showing user selecting wall polygon</p>
+                </div>
+
+                <!-- Simulated UI Overlay -->
+                <div
+                    class="absolute left-4 top-4 bottom-4 w-64 glass rounded-xl border-dashed border border-gray-600/50 hidden md:block opacity-50">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Output - Materials -->
+    <div class="slide" id="slide-6">
+        <div class="max-w-6xl mx-auto w-full h-full flex flex-col">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <span class="text-blue-400 text-sm uppercase tracking-widest font-bold">Output Screen 2</span>
+                    <h2 class="text-4xl font-bold">Material Gallery & Filtering</h2>
+                </div>
+            </div>
+
+            <!-- Image Placeholder -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6 fade-in-up">
+
+                <!-- Simulated Sidebar -->
+                <div
+                    class="hidden md:block col-span-1 glass rounded-xl border-dashed border border-gray-500/30 flex items-center justify-center">
+                    <span class="text-gray-600 text-sm">Filters UI</span>
+                </div>
+
+                <!-- Main Content Placeholder -->
+                <div class="col-span-3 img-placeholder rounded-2xl relative group">
+                    <div class="text-center">
+                        <i
+                            class="bi bi-grid-3x3-gap text-4xl mx-auto text-gray-500 mb-4 group-hover:text-blue-400 transition-colors"></i>
+                        <p class="text-xl font-bold text-gray-400 group-hover:text-white">Insert Materials Page
+                            Screenshot Here</p>
+                        <p class="text-sm text-gray-600 mt-2">Grid view of textures with price</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Tables -->
+    <div class="slide" id="slide-7">
+        <h2 class="text-4xl font-bold mb-8 text-center fade-in-up">Database Schema</h2>
+
+        <div class="max-w-5xl mx-auto w-full overflow-hidden glass rounded-xl shadow-2xl fade-in-up animate-delay-100">
+            <table class="w-full text-left text-gray-400">
+                <thead class="bg-gray-800 text-white uppercase text-sm tracking-wider">
+                    <tr>
+                        <th class="px-6 py-4 font-bold border-b border-gray-700">Table Name</th>
+                        <th class="px-6 py-4 font-bold border-b border-gray-700">Description / Purpose</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">admin_users</td>
+                        <td class="px-6 py-4 text-sm">Stores hashed credentials for secure admin access.</td>
+                    </tr>
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">categories</td>
+                        <td class="px-6 py-4 text-sm">Classifies surfaces (Type: Wall, Floor, Ceiling).</td>
+                    </tr>
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">materials</td>
+                        <td class="px-6 py-4 text-sm">Main inventory: Price, Image URL, Name, Keys.</td>
+                    </tr>
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">quotes</td>
+                        <td class="px-6 py-4 text-sm">Stores user pricing requests & contact details.</td>
+                    </tr>
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">feedback</td>
+                        <td class="px-6 py-4 text-sm">Contact form inquiries.</td>
+                    </tr>
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 font-mono text-[#FBCF84]">reviews</td>
+                        <td class="px-6 py-4 text-sm">User ratings and comments for materials.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 8: Thank You -->
+    <div class="slide" id="slide-8">
+        <div class="text-center relative z-10">
+            <div
+                class="w-24 h-24 bg-[#FBCF84] rounded-full mx-auto mb-8 flex items-center justify-center animate-bounce shadow-[0_0_30px_rgba(212,175,55,0.4)]">
+                <i class="bi bi-check-lg text-4xl text-black"></i>
+            </div>
+
+            <h2 class="text-7xl font-bold mb-6 fade-in-up">Thank You!</h2>
+            <p class="text-2xl text-gray-400 mb-12 fade-in-up animate-delay-100">Any Questions?</p>
+
+            <div class="inline-block glass px-8 py-4 rounded-full border border-gray-700 fade-in-up animate-delay-200">
+                <p class="text-sm text-gray-500">Interior Design Viewer Project</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Init Icons
+        // lucide.createIcons();
+
+        // Slide Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const totalSlides = slides.length;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'exit');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+
+                    // Trigger animations again
+                    const animatedElements = slide.querySelectorAll('.fade-in-up');
+                    animatedElements.forEach(el => {
+                        el.style.animation = 'none';
+                        el.offsetHeight; /* trigger reflow */
+                        el.style.animation = null;
+                    });
+                } else if (index < currentSlide) {
+                    slide.classList.add('exit');
+                }
+            });
+
+            // Update Progress
+            const percentage = ((currentSlide + 1) / totalSlides) * 100;
+            progress.style.width = percentage + '%';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard Nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize
+        updateSlide();
+
+    </script>
+</body>
+
+</html>
